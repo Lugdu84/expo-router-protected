@@ -23,9 +23,7 @@ function TabBarIcon(props: {
 
 export default function TabLayout() {
 	const colorScheme = useColorScheme();
-	const isLoggedIn = useAuthStore((state) => state.isLoggedIn);
-	const isAdmin = useAuthStore((state) => state.isAdmin);
-	const logOut = useAuthStore((state) => state.logOut);
+	const { isLoggedIn, isAdmin, logOut } = useAuthStore();
 
 	if (!isLoggedIn) {
 		return <Redirect href="/sign-in" />;
@@ -54,7 +52,6 @@ export default function TabLayout() {
 				),
 			}}>
 			<Tabs.Screen
-				key="home"
 				name="index"
 				options={{
 					title: 'Home',
@@ -67,7 +64,6 @@ export default function TabLayout() {
 				}}
 			/>
 			<Tabs.Screen
-				key="admin"
 				name="admin"
 				options={{
 					href: isAdmin ? '/(tabs)/admin' : null,

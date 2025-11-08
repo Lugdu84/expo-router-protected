@@ -18,7 +18,7 @@ export const useAuthStore = create(
 				set((state) => ({
 					...state,
 					isLoggedIn: true,
-					isAdmin: false,
+					isAdmin: true,
 				})),
 			logOut: () =>
 				set((state) => ({
