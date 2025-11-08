@@ -3,6 +3,12 @@ import { StyleSheet } from 'react-native';
 import { Text, View } from '@/src/components/Themed';
 
 export default function AdminScreen() {
+	// const isAdmin = useAuthStore((state) => state.isAdmin);
+
+	// if (!isAdmin) {
+	// 	return <Redirect href="/(tabs)" />;
+	// }
+
 	return (
 		<View style={styles.container}>
 			<Text style={styles.title}>Admin Protected</Text>

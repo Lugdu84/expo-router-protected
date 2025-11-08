@@ -1,4 +1,5 @@
 import { useMemo, useState } from 'react';
+import { Redirect } from 'expo-router';
 import { useAuthStore } from '@lib/authStore';
 import {
 	Alert,
@@ -11,13 +12,18 @@ import {
 } from 'react-native';
 
 export default function SignInScreen() {
-	const { logIn } = useAuthStore();
+	const isLoggedIn = useAuthStore((state) => state.isLoggedIn);
+	const logIn = useAuthStore((state) => state.logIn);
 	const [email, setEmail] = useState('');
 	const [password, setPassword] = useState('');
 	const colorScheme = useColorScheme();
 	const isDark = colorScheme === 'dark';
 	const styles = useMemo(() => createStyles(isDark), [isDark]);
 	const placeholderColor = isDark ? '#6b7280' : '#9ca3af';
+
+	if (isLoggedIn) {
+		return <Redirect href="/(tabs)" />;
+	}
 
 	const handleEmailLogin = () => {
 		if (!email.trim() || !password.trim()) {
