@@ -5,8 +5,10 @@ import { createJSONStorage, persist } from 'zustand/middleware';
 type UserState = {
 	isLoggedIn: boolean;
 	isAdmin: boolean;
+	_hasHydrated: boolean;
 	logIn: () => void;
 	logOut: () => void;
+	setHasHydrated: (value: boolean) => void;
 };
 
 export const useAuthStore = create(
@@ -14,6 +16,7 @@ export const useAuthStore = create(
 		(set) => ({
 			isLoggedIn: false,
 			isAdmin: false,
+			_hasHydrated: false,
 			logIn: () =>
 				set((state) => ({
 					...state,
@@ -25,6 +28,11 @@ export const useAuthStore = create(
 					...state,
 					isLoggedIn: false,
 					isAdmin: false,
+				})),
+			setHasHydrated: (value: boolean) =>
+				set((state) => ({
+					...state,
+					_hasHydrated: value,
 				})),
 		}),
 		{

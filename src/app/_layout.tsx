@@ -11,6 +11,7 @@ import { useEffect } from 'react';
 import 'react-native-reanimated';
 
 import { useColorScheme } from '@/src/components/useColorScheme';
+import { useAuthStore } from '@lib/authStore';
 
 export {
 	// Catch any errors thrown by the Layout component.
@@ -26,6 +27,8 @@ export const unstable_settings = {
 SplashScreen.preventAutoHideAsync();
 
 export default function RootLayout() {
+	const colorScheme = useColorScheme();
+	const { _hasHydrated } = useAuthStore();
 	const [loaded, error] = useFonts({
 		SpaceMono: require('@/assets/fonts/SpaceMono-Regular.ttf'),
 		...FontAwesome.font,
@@ -37,7 +40,7 @@ export default function RootLayout() {
 	}, [error]);
 
 	useEffect(() => {
-		if (loaded) {
+		if (loaded && _hasHydrated) {
 			SplashScreen.hideAsync();
 		}
 	}, [loaded]);
@@ -46,12 +49,6 @@ export default function RootLayout() {
 		return null;
 	}
 
-	return <RootLayoutNav />;
-}
-
-function RootLayoutNav() {
-	const colorScheme = useColorScheme();
-
 	return (
 		<ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
 			<Stack>
@@ -59,6 +56,7 @@ function RootLayoutNav() {
 					name="sign-in"
 					options={{ headerShown: false }}
 				/>
+
 				<Stack.Screen
 					name="(tabs)"
 					options={{ headerShown: false }}
