@@ -1,6 +1,6 @@
-import { useMemo, useState } from 'react';
-import { Redirect } from 'expo-router';
 import { useAuthStore } from '@lib/authStore';
+import { Redirect } from 'expo-router';
+import { useMemo, useState } from 'react';
 import {
 	Alert,
 	StyleSheet,
@@ -12,8 +12,8 @@ import {
 } from 'react-native';
 
 export default function SignInScreen() {
-	const isLoggedIn = useAuthStore((state) => state.isLoggedIn);
-	const logIn = useAuthStore((state) => state.logIn);
+	const { isLoggedIn, logIn } = useAuthStore();
+
 	const [email, setEmail] = useState('');
 	const [password, setPassword] = useState('');
 	const colorScheme = useColorScheme();
@@ -27,7 +27,10 @@ export default function SignInScreen() {
 
 	const handleEmailLogin = () => {
 		if (!email.trim() || !password.trim()) {
-			Alert.alert('Formulaire incomplet', 'Veuillez saisir email et mot de passe.');
+			Alert.alert(
+				'Formulaire incomplet',
+				'Veuillez saisir email et mot de passe.'
+			);
 			return;
 		}
 		logIn();
@@ -66,8 +69,7 @@ export default function SignInScreen() {
 				/>
 				<TouchableOpacity
 					style={styles.primaryButton}
-					onPress={handleEmailLogin}
-				>
+					onPress={handleEmailLogin}>
 					<Text style={styles.primaryButtonText}>Se connecter</Text>
 				</TouchableOpacity>
 			</View>
@@ -81,14 +83,12 @@ export default function SignInScreen() {
 			<View style={styles.socialButtons}>
 				<TouchableOpacity
 					style={styles.socialButton}
-					onPress={handleAppleLogin}
-				>
+					onPress={handleAppleLogin}>
 					<Text style={styles.socialButtonText}>Continuer avec Apple</Text>
 				</TouchableOpacity>
 				<TouchableOpacity
 					style={styles.socialButton}
-					onPress={handleGoogleLogin}
-				>
+					onPress={handleGoogleLogin}>
 					<Text style={styles.socialButtonText}>Continuer avec Google</Text>
 				</TouchableOpacity>
 			</View>
