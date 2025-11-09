@@ -1,95 +1,46 @@
 import { useAuthStore } from '@lib/authStore';
 import { Redirect } from 'expo-router';
-import { useMemo, useState } from 'react';
+import { useMemo } from 'react';
 import {
-	Alert,
 	StyleSheet,
 	Text,
-	TextInput,
 	TouchableOpacity,
 	useColorScheme,
 	View,
 } from 'react-native';
 
 export default function SignInScreen() {
-	const { isLoggedIn, logIn } = useAuthStore();
+	const { isLoggedIn, logIn, logInAsAdmin } = useAuthStore();
 
-	const [email, setEmail] = useState('');
-	const [password, setPassword] = useState('');
 	const colorScheme = useColorScheme();
 	const isDark = colorScheme === 'dark';
 	const styles = useMemo(() => createStyles(isDark), [isDark]);
-	const placeholderColor = isDark ? '#6b7280' : '#9ca3af';
 
 	if (isLoggedIn) {
 		return <Redirect href="/(tabs)" />;
 	}
 
-	const handleEmailLogin = () => {
-		if (!email.trim() || !password.trim()) {
-			Alert.alert(
-				'Formulaire incomplet',
-				'Veuillez saisir email et mot de passe.'
-			);
-			return;
-		}
-		logIn();
-	};
-
-	const handleAppleLogin = () => {
-		// Remplacez par l'intégration Apple réelle.
-		logIn();
-	};
-
-	const handleGoogleLogin = () => {
-		// Remplacez par l'intégration Google réelle.
-		logIn();
-	};
-
 	return (
 		<View style={styles.container}>
 			<Text style={styles.title}>Connexion</Text>
-			<View style={styles.form}>
-				<TextInput
-					value={email}
-					onChangeText={setEmail}
-					placeholder="Email"
-					keyboardType="email-address"
-					autoCapitalize="none"
-					placeholderTextColor={placeholderColor}
-					style={styles.input}
-				/>
-				<TextInput
-					value={password}
-					onChangeText={setPassword}
-					placeholder="Mot de passe"
-					secureTextEntry
-					placeholderTextColor={placeholderColor}
-					style={styles.input}
-				/>
-				<TouchableOpacity
-					style={styles.primaryButton}
-					onPress={handleEmailLogin}>
-					<Text style={styles.primaryButtonText}>Se connecter</Text>
-				</TouchableOpacity>
-			</View>
+			<Text style={styles.subtitle}>
+				Cette vue illustre deux parcours: un accès classique et un accès
+				administrateur.
+			</Text>
 
-			<View style={styles.divider}>
-				<View style={styles.dividerLine} />
-				<Text style={styles.dividerText}>ou</Text>
-				<View style={styles.dividerLine} />
-			</View>
-
-			<View style={styles.socialButtons}>
+			<View style={styles.buttons}>
 				<TouchableOpacity
-					style={styles.socialButton}
-					onPress={handleAppleLogin}>
-					<Text style={styles.socialButtonText}>Continuer avec Apple</Text>
+					style={[styles.primaryButton, styles.basicButton]}
+					onPress={logIn}
+					testID="basic-login-button">
+					<Text style={styles.primaryButtonText}>Connexion simple</Text>
 				</TouchableOpacity>
+
 				<TouchableOpacity
-					style={styles.socialButton}
-					onPress={handleGoogleLogin}>
-					<Text style={styles.socialButtonText}>Continuer avec Google</Text>
+					style={[styles.primaryButton, styles.adminButton]}
+					onPress={logInAsAdmin}
+					testID="admin-login-button">
+					<Text style={styles.adminButtonText}>Connexion admin</Text>
 				</TouchableOpacity>
 			</View>
 		</View>
@@ -101,7 +52,7 @@ const createStyles = (isDark: boolean) =>
 		container: {
 			flex: 1,
 			justifyContent: 'center',
-			alignItems: 'stretch',
+			alignItems: 'center',
 			paddingHorizontal: 24,
 			paddingVertical: 32,
 			backgroundColor: isDark ? '#111827' : '#f9fafb',
@@ -113,17 +64,16 @@ const createStyles = (isDark: boolean) =>
 			textAlign: 'center',
 			marginBottom: 32,
 		},
-		form: {
-			marginBottom: 24,
+		subtitle: {
+			fontSize: 16,
+			textAlign: 'center',
+			color: isDark ? '#9ca3af' : '#4b5563',
+			marginBottom: 40,
 		},
-		input: {
-			height: 52,
-			paddingHorizontal: 16,
-			borderRadius: 12,
-			backgroundColor: isDark ? '#1f2937' : '#ffffff',
-			color: isDark ? '#f9fafb' : '#111827',
-			borderWidth: isDark ? 0 : 1,
-			borderColor: isDark ? 'transparent' : '#e5e7eb',
+		buttons: {
+			width: '100%',
+		},
+		basicButton: {
 			marginBottom: 16,
 		},
 		primaryButton: {
@@ -138,37 +88,14 @@ const createStyles = (isDark: boolean) =>
 			fontSize: 16,
 			fontWeight: '600',
 		},
-		divider: {
-			marginVertical: 32,
-			flexDirection: 'row',
-			alignItems: 'center',
-			justifyContent: 'center',
-		},
-		dividerLine: {
-			flex: 1,
-			height: 1,
-			backgroundColor: isDark ? '#374151' : '#e5e7eb',
-			marginHorizontal: 12,
-		},
-		dividerText: {
-			color: isDark ? '#9ca3af' : '#6b7280',
-		},
-		socialButtons: {
-			marginTop: 8,
-		},
-		socialButton: {
-			height: 52,
-			borderRadius: 12,
+		adminButton: {
 			backgroundColor: isDark ? '#1f2937' : '#ffffff',
 			borderWidth: 1,
 			borderColor: isDark ? '#374151' : '#d1d5db',
-			alignItems: 'center',
-			justifyContent: 'center',
-			marginBottom: 16,
 		},
-		socialButtonText: {
+		adminButtonText: {
 			color: isDark ? '#f9fafb' : '#111827',
 			fontSize: 16,
-			fontWeight: '500',
+			fontWeight: '600',
 		},
 	});

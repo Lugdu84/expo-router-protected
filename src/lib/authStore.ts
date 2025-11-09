@@ -7,6 +7,7 @@ type UserState = {
 	isAdmin: boolean;
 	_hasHydrated: boolean;
 	logIn: () => void;
+	logInAsAdmin: () => void;
 	logOut: () => void;
 	setHasHydrated: (value: boolean) => void;
 };
@@ -22,6 +23,12 @@ export const useAuthStore = create(
 					...state,
 					isLoggedIn: true,
 					isAdmin: false,
+				})),
+			logInAsAdmin: () =>
+				set((state) => ({
+					...state,
+					isLoggedIn: true,
+					isAdmin: true,
 				})),
 			logOut: () =>
 				set((state) => ({
