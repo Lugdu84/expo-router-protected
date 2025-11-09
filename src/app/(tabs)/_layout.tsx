@@ -1,5 +1,5 @@
 import FontAwesome from '@expo/vector-icons/FontAwesome';
-import { Redirect, Tabs } from 'expo-router';
+import { Tabs } from 'expo-router';
 import { Pressable } from 'react-native';
 
 import { useClientOnlyValue } from '@/src/components/useClientOnlyValue';
@@ -25,9 +25,9 @@ export default function TabLayout() {
 	const colorScheme = useColorScheme();
 	const { isLoggedIn, isAdmin, logOut } = useAuthStore();
 
-	if (!isLoggedIn) {
-		return <Redirect href="/sign-in" />;
-	}
+	// if (!isLoggedIn) {
+	// 	return <Redirect href="/sign-in" />;
+	// }
 
 	return (
 		<Tabs
@@ -63,19 +63,21 @@ export default function TabLayout() {
 					),
 				}}
 			/>
-			<Tabs.Screen
-				name="admin"
-				options={{
-					href: isAdmin ? '/(tabs)/admin' : null,
-					title: 'Admin',
-					tabBarIcon: ({ color }) => (
-						<TabBarIcon
-							name="code"
-							color={color}
-						/>
-					),
-				}}
-			/>
+			<Tabs.Protected guard={isAdmin}>
+				<Tabs.Screen
+					name="admin"
+					options={{
+						// href: isAdmin ? '/(tabs)/admin' : null,
+						title: 'Admin',
+						tabBarIcon: ({ color }) => (
+							<TabBarIcon
+								name="code"
+								color={color}
+							/>
+						),
+					}}
+				/>
+			</Tabs.Protected>
 		</Tabs>
 	);
 }

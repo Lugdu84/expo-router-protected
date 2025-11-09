@@ -1,5 +1,4 @@
 import { useAuthStore } from '@lib/authStore';
-import { Redirect } from 'expo-router';
 import { useMemo } from 'react';
 import {
 	StyleSheet,
@@ -16,9 +15,9 @@ export default function SignInScreen() {
 	const isDark = colorScheme === 'dark';
 	const styles = useMemo(() => createStyles(isDark), [isDark]);
 
-	if (isLoggedIn) {
-		return <Redirect href="/(tabs)" />;
-	}
+	// if (isLoggedIn) {
+	// 	return <Redirect href="/(tabs)" />;
+	// }
 
 	return (
 		<View style={styles.container}>
